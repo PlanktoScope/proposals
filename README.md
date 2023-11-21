@@ -224,7 +224,10 @@ full review or that need to be considered quickly due to pending releases.
 #### Draft
 
 Proposal authors can add issues to the Draft column for proposals which are not
-yet ready for review.
+yet ready for review. Alternatively, they can create a draft design document
+with name `design/draft-shortname.md` in the PlanktoScope proposals repository,
+where `shortname` is a short name (a few dash-separated words at most), before
+creating an issue on GitHub.
 
 #### Submitted
 
