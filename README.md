@@ -56,11 +56,11 @@ decision about whether to accept or decline the proposal.
    more detailed design document.
 
 3. The proposal author writes a [design document](#design-documents) to work out
-details of the proposed design and address the concerns raised in the initial
-discussion.
+   details of the proposed design and address the concerns raised in the initial
+   discussion.
 
 4. Once comments and revisions on the design document come to an end, there is a
-final discussion on the issue, to reach one of two outcomes:
+   final discussion on the issue, to reach one of two outcomes:
    
     - Accept proposal, or
    
@@ -74,13 +74,13 @@ final discussion on the issue, to reach one of two outcomes:
 ### Goals
 
 - Ensure that broad input is collected and consensus is facilitated on important
-decisions, to increase the quality and effectiveness of decisions.
+  decisions, to increase the quality and effectiveness of decisions.
 
 - Make sure that proposals get a proper, fair, and timely evaluation with a
-clear answer.
+  clear answer.
 
 - Record and announce decisions clearly, to reduce surprise for people who will
-be impacted by decisions.
+  be impacted by decisions.
 
 - Make past proposals easy to find, to avoid duplicated effort.
 
@@ -224,9 +224,9 @@ yet ready for review.
 
 #### Submitted
 
-Once their proposal is ready for review, the author add their issue to the
-Submitted column or (if they are unable to do so) add a comment to notify the
-proposal review group, who will add their issue to the Submitted column.
+Once their proposal is ready for review, the author should add their issue to
+the Submitted column or (if they are unable to do so) add a comment to notify
+the proposal review group, who will add their issue to the Submitted column.
 
 The weekly proposal review meetings aim to look at all the issues in the Under
 Review and Final Comments columns.
