@@ -141,9 +141,8 @@ document.
   and `shortname` is a short name (a few dash-separated words at most).
   If the pull request is made directly in the repository (rather than being made
   in a GitHub fork) the name of the Git branch for the pull request should be
-  `NNNN`. 
-  The name of the pull request should use the default pull request template for
-  the PlanktoScope proposals repository.
+  `NNNN-shortname`. 
+  The name of the pull request should be `design doc: NNNN-shortname`.
 
 - The design document should follow [the template](design/TEMPLATE.md).
 
