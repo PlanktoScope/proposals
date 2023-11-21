@@ -137,8 +137,13 @@ document.
 - The design document should be added to the
   [PlanktoScope proposals repository](https://github.com/PlanktoScope/proposals)
   in a new pull request as `design/NNNN-shortname.md`, where `NNNN` is the
-  GitHub issue number and `shortname` is a short name (a few dash-separated
-  words at most).
+  GitHub issue number (padded with leading zeros if it has less than 4 digits)
+  and `shortname` is a short name (a few dash-separated words at most).
+  If the pull request is made directly in the repository (rather than being made
+  in a GitHub fork) the name of the Git branch for the pull request should be
+  `NNNN`. 
+  The name of the pull request should use the default pull request template for
+  the PlanktoScope proposals repository.
 
 - The design document should follow [the template](design/TEMPLATE.md).
 
