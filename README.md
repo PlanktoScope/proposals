@@ -37,11 +37,13 @@ decision about whether to accept or decline the proposal.
 1. The proposal author
    [creates a brief issue](https://github.com/PlanktoScope/PlanktoScope/issues/new/choose)
    describing the proposal.
+
    Note: A design document is optional at this point.
+
    Note: A non-proposal issue can be turned into a proposal by simply adding the
    `proposal` label.
 
-2. A discussion on the issue tracker aims to triage the proposal into one of
+3. A discussion on the issue tracker aims to triage the proposal into one of
    three outcomes:
    
     - Accept proposal, or
@@ -55,11 +57,11 @@ decision about whether to accept or decline the proposal.
    addressed in a
    more detailed design document.
 
-3. The proposal author writes a [design document](#design-documents) to work out
+4. The proposal author writes a [design document](#design-documents) to work out
    details of the proposed design and address the concerns raised in the initial
    discussion.
 
-4. Once comments and revisions on the design document come to an end, there is a
+5. Once comments and revisions on the design document come to an end, there is a
    final discussion on the issue, to reach one of two outcomes:
    
     - Accept proposal, or
@@ -94,7 +96,7 @@ PlanktoScope's software, hardware, or development processes.
 [github.com/PlanktoScope](https://github.com/PlanktoScope) organization.
 It also includes changes with consequences for backwards-compatibility of the
 PlanktoScope hardware and software.
-Proposals are appropriate in the following examples:
+Proposals are appropriate in the following cases, and also in other cases:
 
 - Add or change a project process.
 
@@ -119,24 +121,24 @@ In cases where a proposed change interacts with a feature of the PlanktoScope
 hardware which is only present in some hardware versions, the proposal must
 describe a mechanism for handling such a situation (for example, only enabling a
 feature on certain hardware versions; or providing fallback functionality); a
-uesign document may be needed for such a proposal.
+design document may be needed for such a proposal.
 
 The PlanktoScope software is not yet mature enough to guarantee compatibility
 across versions of the software.
 In general, proposed changes should maintain backwards-compatibility across
 public interfaces, including data and metadata schemas.
 When backwards-compatibility must be broken, a proposal must be made with a
-design document explaining and addressing the consequences of breaking
-compatibility.
+design document explaining the need to break compatibility and addressing the
+consequences of breaking compatibility.
 
 ### Design Documents
 
 As noted above, some (but not all) proposals need to be elaborated in a design
 document.
 
-- The design document should be added to the
+- A pull request should be created in the
   [PlanktoScope proposals repository](https://github.com/PlanktoScope/proposals)
-  in a new pull request as `design/NNNN-shortname.md`, where `NNNN` is the
+  to add the design document as `design/NNNN-shortname.md`, where `NNNN` is the
   GitHub issue number (padded with leading zeros if it has less than 4 digits)
   and `shortname` is a short name (a few dash-separated words at most).
   If the pull request is made directly in the repository (rather than being made
@@ -158,30 +160,32 @@ document.
 - Comments on GitHub pull requests should be restricted to grammar, spelling,
   formatting, or procedural errors related to the preparation of the proposal
   itself.
-  All other comments should be addressed to the related GitHub issue.
+  All other comments should be made on the related GitHub issue.
 
 When writing design documents, it is important to consider various aspects of
 decision-making, which might include:
 
-- Documenting the viable options (or a subset of options if we can easily rule
+- Describing the current architecture or implementation which will be changed.
+
+- Describing the viable options (or a subset of options if we can easily rule
   some out) and the benefits and drawbacks of each option.
 
-- Documenting our reasoning, including data and references wherever possible,
+- Describing our reasoning, including data and references wherever possible,
   to make it easy for our future selves (and future contributors) to understand
   the decisions we've made and why.
 
-- Describing implications for various stakeholders of the PlanktoScope project,
-  such as FairScope, PlanktoScope end-users, and/or PlanktoScope project
-  contributors.
+- Describing implications for the various kinds of people who have some
+  relationship with the PlanktoScope project,   such as FairScope, PlanktoScope
+  end-users, and/or PlanktoScope project contributors.
 
-- Describing implications for various technical aspects of the PlanktoScope as a
-  platform, such as (but not limited to) approachability, transparency,
+- Describing consequences for various technical aspects of the PlanktoScope as
+  a platform, such as (but not limited to) approachability, transparency,
   compatibility, extensibility, security, and stability.
 
 Not every design document should have the same level of detail.
 Some have more sense of urgency and therefore might not be as rigorous as
 others.
-Use your best judgement about the level of depth to include.
+Use your best judgment about the level of depth to include.
 
 ### Quick Start for Experienced Committers
 
@@ -305,22 +309,25 @@ Under Review or Final Comments stages, including for the following reasons:
 - If a proposal directly contradicts the core design of some aspect of the
   project (when that aspect was intentionally designed), or if a proposal is
   impossible to implement efficiently or at all.
+  
   However, if it seems like there is general interest from others, or that
-  discussion may lead to a feasible proposal, the proposal may be reopened and
-  the discussion continued.
+  discussion may lead to a feasible proposal, the issue may be kept open (or
+  re-opened) and the discussion continued.
 - If the original author closes the issue or retracts it in a comment.
-  If it seems like there is still general interest from others, the proposal may
-  be reopened and the discussion continued.
+ 
+  However, if it seems like there is still general interest from others, the
+  proposal may be kept open (or re-opened) and the discussion continued.
 - If a proposal is obsoleted by changes to the project that have been made since
   the proposal was filed.
-  If it seems like there is still general interest from others, or that
+  
+  However, if it seems like there is still general interest from others, or that
   discussion may lead to a different, non-obsolete proposal, the proposal may be
-  reopened and the discussion continued.
+  kept open (or re-opened) and the discussion continued.
 
 ### Consensus and Disagreement
 
 The goal of the proposal process is to reach general consensus about the outcome
-in a timely manner.
+of each proposal in a timely manner.
 
 If proposal review cannot identify a general consensus in the discussion of the
 issue on the issue tracker, the usual result is that the proposal is declined.
