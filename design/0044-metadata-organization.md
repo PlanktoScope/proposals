@@ -137,6 +137,7 @@ This new file could be created at home/pi/PlanktoScope/
 Having 3 files instead of 2 to simplify and reorganize the metadata may seem to be counter productive.
 Maybe just a proper formatting of the json file with personal_info: {"key":"value", ...}, settings:{"key":"value", ...} can be another solution.
 The key aspect of this proposal is to know where to look at when debugging, modifying the use of the Planktoscope and to be more user friendly in order to facilitate the growth of a "non-developpers community based users".
+The use and limitations of prefixes (acq_, object_, sample_, process_) suppose that we respect EcoTaxa's specifications.
 
 ## Compatibility
 
