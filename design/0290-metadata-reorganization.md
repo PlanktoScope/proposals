@@ -41,7 +41,7 @@ We finally propose to dispatch existing metadatas between those 3 files accordin
   This file could be used between team members using Planktoscopes for the same campaign/study to assure an identical protocol/equipment used information.
   
 Here is the current content of hardware.json :
-'''
+```
 {
   "stepper_reverse": false,
   "microsteps": 256,
@@ -57,9 +57,9 @@ Here is the current content of hardware.json :
   "acq_fnumber_objective": 12,
   "process_pixel_fixed": 0.88
 }
-'''
+```
 Here is what we propose for its content :
-'''
+```
 {
   "inst_serial_number": "U072",
   "acq_inst_name": "PlanktoScope",
@@ -79,9 +79,9 @@ Here is what we propose for its content :
   "process_id": "1",
   "process_pixel_size": 0.75
 }
-'''
+```
 Here is the current content of config.json : 
-'''
+```
 {
   "sample_project": "Project's name",
   "sample_id": 1,
@@ -102,9 +102,9 @@ Here is the current content of config.json :
   "sleep_before": 0.5,
   "imaging_pump_volume": 0.01
 }
-'''
+```
 Here is what we propose for its content : 
-'''
+```
 {
   "acq_camera_iso": 100,
   "acq_focus_max_speed": 5,
@@ -119,9 +119,9 @@ Here is what we propose for its content :
   "object_camera_gain_red": 1.5,
   "object_camera_gain_blue": 1.9
 }
-'''
+```
 Here is an example of the content of personal_info.json : 
-'''
+```
 {
   "sample_project": "FairScope Factory Settings",
   "sample_operator": "Thibaut Pollina",
@@ -136,7 +136,7 @@ Here is an example of the content of personal_info.json :
   "object_depth_max": 0,
   "process_id": "1"
 }
-'''
+```
 This new file could be created at home/pi/PlanktoScope/
 
 ## Rationale
