@@ -48,7 +48,8 @@ For those, a simple solution would be to continue selecting their configuration 
 
 ## Implementation
 
-The EEPROM chip model of the PS HAT is m24c32, documentation is available on the Fairscope drive : https://drive.google.com/file/d/132teUB6DbyinUFwnRRZi6CEhJYIZ_4s_/view?usp=drive_link
+The EEPROM chip model of the PS HAT is m24c32, documentation is available on the Fairscope drive : 
+https://drive.google.com/file/d/132teUB6DbyinUFwnRRZi6CEhJYIZ_4s_/view?usp=drive_link
 When connecting to the Planktoscope, you can via the interface open the cockpit GUI that lets you access a terminal to execute commands.
 
 The command line to retrive EEPROM address is : 
@@ -57,8 +58,7 @@ sudo i2cdetect -y 1
 ```
 
 The Raspberry pi EEPROM chip address is 0x50 by default
-The LM36011YKBR LED chip address is 0x64 by default
-
+The LM36011YKBR LED chip address is 0x64 by default and seems to be the only one showing when executing i2cdetect.
 We cannot detect EEPROM i2c address by doing a i2cdetect, we only retrieve the LED chip i2c address.
 
 Staring from a memory address like 0x50 it is possible to write each character of a string on a byte and to read the stored data staring from the 0x50 address.
@@ -71,6 +71,8 @@ If using the smbus2 python library to write on the EEPROM the SMBUS_MAX_BLOCK (m
 The following code is to know if the EEPROM contains data : 
 ```
 bus = smbus2.SMBus(1)
+eeprom_adress = 0x50 # Default address of the raspberry pi EEPROM, to replace with proper PS HAT EEPROM address
+memory_adress = 0x00 # Enter the register address where you want to know if data is already stored
 
 value = bus.read_byte_data(eeprom_adress, memory_adress)
 
