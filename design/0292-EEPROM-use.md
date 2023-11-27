@@ -57,12 +57,14 @@ sudo i2cdetect -y 1
 ```
 
 The Raspberry pi EEPROM chip address is 0x50 by default
-The PS HAT EEPROM address seems to be 0x64
+The LM36011YKBR LED chip address is 0x64 by default
+
+We cannot detect EEPROM i2c address by doing a i2cdetect, we only retrieve the LED chip i2c address.
 
 Staring from a memory address like 0x50 it is possible to write each character of a string on a byte and to read the stored data staring from the 0x50 address.
 
 There is an eeprom library existing : https://github.com/ARizzo35/python-eeprom
-There is an smbus2 library that is working fine on the tests made to write data on the EEPROM : https://github.com/Gadgetoid/py-smbus/tree/master
+There is an smbus2 library that is working fine on the tests made to write data on the EEPROM : [https://github.com/Gadgetoid/py-smbus/tree/master](https://github.com/kplindegaard/smbus2)
 
 If using the smbus2 python library to write on the EEPROM the SMBUS_MAX_BLOCK (maximum size of the block of data that we can write in one time) is 32 bytes.
 
@@ -93,10 +95,11 @@ We can see the following mapping (SDA = serial data, SDI = serial data in, SDO =
 ## Open issues (if applicable)
 
 The tests that were made blocked on the reading of the stored data. 
-The PS HAT documentation does not contain information on the encoding applied and all the encoding we tried gave us no or strange results (the byte data seems to not corresponds to the stored data).
+The PS HAT documentation does not contain some interesting information concerning the i2c configuration and use of the different chips.
+The use of the smbus2 library gave us good results in writing those informations on the EEPROM both using the write_byte_data function and write_i2c_block_data function but the data read seems to not corresponds to the stored data when using the read_i2c_block_data function, the read_byte_data function manages to read written data but only 4 bytes.
+Several encoding were tested (utf-8, utf-16, ascii, 8859-1) but the data retrieved is always in replacement characters.
+
 The use of the subprocess library allowed us to retrieve easily raspberry pi version and memory informations.
-The use of the smbus library gave us good results in writing those informations on the EEPROM but the data read (raw data from the EEPROM).
-For example when the list of characters [0,1,2,3] was written, the raw data that we read back at the memory address was [0,2,0,0]
 
 This proposal tends to implement another script at boot which may not simplify or shorten the boot time.
 
