@@ -4,7 +4,9 @@
 # Proposal: [Title]
 
 Author(s): [Author Name, Co-Author Name]
+
 Last updated: [Date]
+
 Discussion at <https://github.com/PlanktoScope/PlanktoScope/issues/NNNNN>
 
 ## Abstract
