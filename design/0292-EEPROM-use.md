@@ -62,9 +62,9 @@ The PS HAT EEPROM address seems to be 0x64
 Staring from a memory address like 0x50 it is possible to write each character of a string on a byte and to read the stored data staring from the 0x50 address.
 
 There is an eeprom library existing : https://github.com/ARizzo35/python-eeprom
-There is an smbus library that is working fine on the tests made to write data on the EEPROM : https://github.com/Gadgetoid/py-smbus/tree/master
+There is an smbus2 library that is working fine on the tests made to write data on the EEPROM : https://github.com/Gadgetoid/py-smbus/tree/master
 
-If using the smbus python library to write on the EEPROM the SMBUS_MAX_BLOCK (maximum size of the block of data that we can write in one time) is 32 bytes.
+If using the smbus2 python library to write on the EEPROM the SMBUS_MAX_BLOCK (maximum size of the block of data that we can write in one time) is 32 bytes.
 
 The following code is to know if the EEPROM contains data : 
 ```
