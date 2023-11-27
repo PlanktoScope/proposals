@@ -48,6 +48,7 @@ For those, a simple solution would be to continue selecting their configuration 
 
 ## Implementation
 
+The EEPROM chip model of the PS HAT is m24c32, documentation is available on the Fairscope drive : https://drive.google.com/file/d/132teUB6DbyinUFwnRRZi6CEhJYIZ_4s_/view?usp=drive_link
 When connecting to the Planktoscope, you can via the interface open the cockpit GUI that lets you access a terminal to execute commands.
 
 The command line to retrive EEPROM address is : 
@@ -83,9 +84,19 @@ data = bus.read_i2c_block_data(eeprom_adress, 0x00, 32)
 print("Données de l'EEPROM: ", data)
 ```
 
+Using the schematics of the printed circuit of the HAT (https://github.com/PlanktoScope/PlanktoScope/blob/master/hardware/v2.5/hat/Planktoscope-Hat-Schematic.pdf), we can read the GPIO mapping that could help us interrogate the PS HAT in order to retrieve hardware information.
+We can see the following mapping (SDA = serial data, SDI = serial data in, SDO = serial data out) : 
+* LED is on pin 3 of the GPIO (I2C1)
+* EEPROM is on pin 27 (EEPROM_SDA)
+* Controller 1 and 2 are on pin 21 (SPIO_MISO)
+
 ## Open issues (if applicable)
 
-The tests that were made blocked on the reading of the stored data. The PS HAT documentation does not contain information on the encoding applied and all the encoding we tried gave us no or strange results (the byte data seems to not corresponds to the stored data).
+The tests that were made blocked on the reading of the stored data. 
+The PS HAT documentation does not contain information on the encoding applied and all the encoding we tried gave us no or strange results (the byte data seems to not corresponds to the stored data).
+The use of the subprocess library allowed us to retrieve easily raspberry pi version and memory informations.
+The use of the smbus library gave us good results in writing those informations on the EEPROM but the data read (raw data from the EEPROM).
+For example when the list of characters [0,1,2,3] was written, the raw data that we read back at the memory address was [0,2,0,0]
 
 This proposal tends to implement another script at boot which may not simplify or shorten the boot time.
 
