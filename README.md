@@ -37,13 +37,13 @@ decision about whether to accept or decline the proposal.
 1. The proposal author
    [creates a brief issue](https://github.com/PlanktoScope/PlanktoScope/issues/new/choose)
    describing the proposal.
-
+   
    Note: A design document is optional at this point.
-
+   
    Note: A non-proposal issue can be turned into a proposal by simply adding the
    `proposal` label.
 
-3. A discussion on the issue tracker aims to triage the proposal into one of
+2. A discussion on the issue tracker aims to triage the proposal into one of
    three outcomes:
    
     - Accept proposal, or
@@ -57,11 +57,11 @@ decision about whether to accept or decline the proposal.
    addressed in a
    more detailed design document.
 
-4. The proposal author writes a [design document](#design-documents) to work out
+3. The proposal author writes a [design document](#design-documents) to work out
    details of the proposed design and address the concerns raised in the initial
    discussion.
 
-5. Once comments and revisions on the design document come to an end, there is a
+4. Once comments and revisions on the design document come to an end, there is a
    final discussion on the issue, to reach one of two outcomes:
    
     - Accept proposal, or
@@ -138,13 +138,13 @@ document.
 
 - A pull request should be created in the
   [PlanktoScope proposals repository](https://github.com/PlanktoScope/proposals)
-  to add the design document as `design/NNNN-shortname.md`, where `NNNN` is the
-  GitHub issue number (padded with leading zeros if it has less than 4 digits)
+  to add the design document as `design/NNNNN-shortname.md`, where `NNNNN` is the
+  GitHub issue number (padded with leading zeros if it has less than 5 digits)
   and `shortname` is a short name (a few dash-separated words at most).
   If the pull request is made directly in the repository (rather than being made
   in a GitHub fork) the name of the Git branch for the pull request should be
-  `NNNN-shortname`. 
-  The name of the pull request should be `design doc: NNNN-shortname`.
+  `NNNNN-shortname`. 
+  The name of the pull request should be `design doc: NNNNN-shortname`.
 
 - The design document should follow [the template](design/TEMPLATE.md).
 
@@ -306,6 +306,7 @@ Under Review or Final Comments stages, including for the following reasons:
 
 - If a proposal duplicates a previously decided proposal, and there is no
   significant new information which might change the previous decision.
+
 - If a proposal directly contradicts the core design of some aspect of the
   project (when that aspect was intentionally designed), or if a proposal is
   impossible to implement efficiently or at all.
@@ -313,10 +314,12 @@ Under Review or Final Comments stages, including for the following reasons:
   However, if it seems like there is general interest from others, or that
   discussion may lead to a feasible proposal, the issue may be kept open (or
   re-opened) and the discussion continued.
+
 - If the original author closes the issue or retracts it in a comment.
- 
+  
   However, if it seems like there is still general interest from others, the
   proposal may be kept open (or re-opened) and the discussion continued.
+
 - If a proposal is obsoleted by changes to the project that have been made since
   the proposal was filed.
   
