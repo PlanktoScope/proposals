@@ -3,9 +3,11 @@
 
 # Proposal: [Title]
 
-Author(s): [Author Name, Co-Author Name]
+Author(s): [Author Name (@github-username or email address), Co-Author Name (@github-username or email address)]
+
 Last updated: [Date]
-Discussion at <https://github.com/PlanktoScope/PlanktoScope/issues/NNNNN>
+
+Discussion at: <https://github.com/PlanktoScope/PlanktoScope/issues/NNNNN>
 
 ## Abstract
 
