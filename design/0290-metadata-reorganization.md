@@ -10,10 +10,10 @@ Discussion at: <https://github.com/PlanktoScope/PlanktoScope/issues/290>
 
 This design document proposes a reorganization of the metadata fields into three JSON files, in order to:
 
-- Have a more logical organization of metadata fields between the configuration files, to make it easier to find specific fields.
-- Make it easy for a user to share their `config.json` file, so that they can their Planktoscope settings can be reused on other machines or by other users, but without sharing any personal information or specific hardware configurations.
+- Organize metadata fields between the configuration files in a more logical way which makes it easier to find specific fields.
+- Make it easy for a user to share their `config.json` file, so that they can make their Planktoscope settings available for reuse on other machines or by other users, but without sharing any personal information or hardware-specific information (e.g. machine serial number).
 - Have a more precise `hardware.json` file for debugging and for holding all information about a specific machine (e.g. which will be useful for FairScope).
-- Create a `personal_info.json` file which eventually could be encrypted and used to commit modifications to the machine, export directly to Ecotaxa, or provide other other user-oriented features in the future.
+- Create a `personal_info.json` file which eventually could be encrypted and used to commit modifications to the machine, upload datasets to Ecotaxa, or provide other other user-oriented features in the future.
 - Improve data quality by adding more relevant scientific variables to the metadata.
 
 ## Background
@@ -43,8 +43,8 @@ Currently, the PlanktoScope software stores metadata in two configuration files:
     ```
     
 - [`config.json`](https://github.com/PlanktoScope/PlanktoScope/tree/software/v2023.9.0-beta.1/software/node-red-dashboard/default-configs)
-  - This file contains the GUI parameters selected by the user in the Node-RED dashboard for data acquisition.
-  - Depending on the PlanktoScope hardware version selected by the user in the Node-RED dashboard, a `hardware.json` file for that version is copied from `/home/pi/PlanktoScope/software/node-red-dashboard/default-configs` to `/home/pi/PlanktoScope`
+  - This file contains inputs entered by the user in the Node-RED dashboard to describe their sample and to configure image acquisition.
+  - Depending on the PlanktoScope hardware version selected by the user in the Node-RED dashboard, a `config.json` file for that version is copied from `/home/pi/PlanktoScope/software/node-red-dashboard/default-configs` to `/home/pi/PlanktoScope`
   - Here is an example of the contents of the `config.json` file:
     ```
     {
@@ -69,10 +69,9 @@ Currently, the PlanktoScope software stores metadata in two configuration files:
     }
     ```
 
-Both configuration files are used by the Node-RED dashboard.
-We have a ["Metadata Compilation" spreadsheet](https://docs.google.com/spreadsheets/d/1TSIaOFEIMvvYyqAFrsiZxVtGXZvWVdZbWO_LU-2A_TE/edit?usp=drive_link) which describes every metadata field, including metadata fields which are persistently stored in those files and metadata fields which are set by the user via the Node-RED dashboard but not persisted in files.
-Both types of metadata fields are used to generate a `metadata.json` file which is exported by the Python backend's `ImagerProcess` module as part of image acquisition.
-Only fields from our "Metadata Compilation" spreadsheet with field names containing one of the following prefixes are exported to the `metadata.json` file:
+Both of these configuration files are used by the Node-RED dashboard for saving metadata persistently across restart, but some metadata information set by the user in the Node-RED dashboard is not persisted.
+Both persisted and unpersisted metadata fields are assembled into a `metadata.json` file for each raw dataset, which is created by the Python backend's `ImagerProcess` module as part of image acquisition.
+We have a ["Metadata Compilation" spreadsheet](https://docs.google.com/spreadsheets/d/1TSIaOFEIMvvYyqAFrsiZxVtGXZvWVdZbWO_LU-2A_TE/edit?usp=drive_link) which describes every metadata field; only fields from that spreadsheet with field names containing one of the following prefixes are exported to the `metadata.json` file:
 - `sample_`
 - `acq_`
 - `object_`
@@ -80,12 +79,13 @@ Only fields from our "Metadata Compilation" spreadsheet with field names contain
 
 ## Proposal
 
-We propose to add a third file, to be named `personal_info.json`, which will store the user's personal information and information about the scientific mission for which the PlanktoScope is being operated.
+We propose to add a third file, to be named `personal_info.json`, which will store the user's personal information as well as information about the scientific mission for which the PlanktoScope is being operated.
 We also propose to add some more metadata fields to improve the metadata exported to Ecotaxa.
 Finally, we propose to reorganize existing metadata fields between three files, according to the following rules: 
 
-- The `hardware.json` file should only have information about the characteristics of the machine.
-  This file should not be modified by the user except for selecting the PlanktoScope's hardware version and the machine's serial number, and only when we cannot retrieve the information automatically (such as from the custom PlanktoScope HAT's EEPROM).
+- The `hardware.json` file should only have information about the hardware characteristics of the PlanktoScope.
+  This file should only be modified by the user when we cannot determine the information automatically (such as from the custom PlanktoScope HAT's EEPROM).
+  In such situations, the user should only need to select the PlanktoScope's hardware version and its serial number (assuming their PlanktoScope has a standard hardware configuration).
   - Here is an example of our proposal for the contents of the `hardware.json` file:
     ```
     {
@@ -146,18 +146,22 @@ Finally, we propose to reorganize existing metadata fields between three files, 
       "process_id": "1"
     }
     ```
-  - This new file could be stored at `/home/pi/PlanktoScope/`, which is where the two other configuration files are currently stored.
+  - This new file could be stored at `/home/pi/PlanktoScope/`, alongside the two other configuration files.
 
 ## Rationale
 
+By making the naming and organization of metadata fields more logical, we can make it easier for developers and users to find the necessary metadata fields when they inspect the metadata files as part of debugging or modifying their Planktoscopes.
+
 Having three files instead of two to simplify and reorganize the metadata may seem to be counterproductive.
 An alternative solution could be to improve the organization of the json file with nested objects, such as `personal_info: {"key":"value", ...}` and `settings:{"key":"value", ...}`.
-The key aspect of this proposal is to know where to go when debugging, modifying the use of the Planktoscope; and to be more user-friendly in order to facilitate the growth of a community of users who aren't software developers.
-The use and limitations of prefixes (`acq_`, `object_`, `sample_`, `process_`) suppose that we respect EcoTaxa's specifications.
+However, separating different group of metadata fields into different files based on when/how those metadata files need to be changed/shared makes it easy to replace the values of one group of fields just by overwriting one file.
+This is an advantage of having multiple metadata files rather than a single metadata file.
+
+The use and limitations of prefixes (`acq_`, `object_`, `sample_`, `process_`) in the metadata field names is motivated by following EcoTaxa's metadata field naming system.
 
 ## Compatibility
 
-There should be no compatibility issue unless we couple this proposal with the loading of `hardware.json` with caracteristics stored in the HAT EEPROM.
+There should be no compatibility issue unless we couple this proposal with the loading of `hardware.json` metadata fields from data stored in the PlanktoScope HAT's EEPROM.
 
 ## Implementation
 
