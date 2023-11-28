@@ -13,7 +13,7 @@ This design document proposes a reorganization of the metadata fields into three
 - Organize metadata fields between the configuration files in a more logical way which makes it easier to find specific fields.
 - Make it easy for a user to share their `config.json` file, so that they can make their Planktoscope settings available for reuse on other machines or by other users, but without sharing any personal information or hardware-specific information (e.g. machine serial number).
 - Have a more precise `hardware.json` file for debugging and for holding all information about a specific machine (e.g. which will be useful for FairScope).
-- Create a `personal_info.json` file which eventually could be encrypted and used to commit modifications to the machine, upload datasets to Ecotaxa, or provide other other user-oriented features in the future.
+- Create a `personal_info.json` file which eventually could be encrypted and used to commit modifications to the machine, upload datasets to Ecotaxa, or provide other user-oriented features in the future.
 - Improve data quality by adding more relevant scientific variables to the metadata.
 
 ## Background
@@ -44,7 +44,8 @@ Currently, the PlanktoScope software stores metadata in two configuration files:
     
 - [`config.json`](https://github.com/PlanktoScope/PlanktoScope/tree/software/v2023.9.0-beta.1/software/node-red-dashboard/default-configs)
   - This file contains inputs entered by the user in the Node-RED dashboard to describe their sample and to configure image acquisition.
-  - Depending on the PlanktoScope hardware version selected by the user in the Node-RED dashboard, a `config.json` file for that version is copied from `/home/pi/PlanktoScope/software/node-red-dashboard/default-configs` to `/home/pi/PlanktoScope`
+  - Depending on the HAT type specified for the PlanktoScope distro setup scripts to create the PlanktoScope SD card image, a default `config.json` file for the latest hardware version of the HAT type (v2.1 for `adafruithat`, v2.6 for `pscopehat`) is copied from `/home/pi/PlanktoScope/software/node-red-dashboard/default-configs` to `/home/pi/PlanktoScope`.
+    This is done in order to set the `acq_instrument` field to a reasonable default value, as a workaround for the storage of that metadata field in `config.json` rather than `hardware.json`.
   - Here is an example of the contents of the `config.json` file:
     ```
     {
@@ -69,8 +70,8 @@ Currently, the PlanktoScope software stores metadata in two configuration files:
     }
     ```
 
-Both of these configuration files are used by the Node-RED dashboard for saving metadata persistently across restart, but some metadata information set by the user in the Node-RED dashboard is not persisted.
-Both persisted and unpersisted metadata fields are assembled into a `metadata.json` file for each raw dataset, which is created by the Python backend's `ImagerProcess` module as part of image acquisition.
+Both of these configuration files are used by the Node-RED dashboard for saving metadata persistently across restarts, but some metadata information set by the user in the Node-RED dashboard is not persisted.
+Persisted and unpersisted metadata fields are assembled into a `metadata.json` file for each raw dataset, which is created by the Python backend's `ImagerProcess` module as part of image acquisition.
 We have a ["Metadata Compilation" spreadsheet](https://docs.google.com/spreadsheets/d/1TSIaOFEIMvvYyqAFrsiZxVtGXZvWVdZbWO_LU-2A_TE/edit?usp=drive_link) which describes every metadata field; only fields from that spreadsheet with field names containing one of the following prefixes are exported to the `metadata.json` file:
 - `sample_`
 - `acq_`
