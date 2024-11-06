@@ -61,7 +61,9 @@ For those, a simple solution would be to continue selecting their configuration 
 The PlanktoScope versions V2.5 and V2.6 do not natively support writing data to the EEPROM chip because the write-protect (WP) pin of the EEPROM is enabled. To disable write protection, a solder point must be applied to the WP pin.
 
 ## Implementation
-The EEPROM project has reached a functional stage, with all desired actions for writing and reading hardware information now operational. The next phase will focus on integrating this functionality into the broader PlanktoScope software, allowing users to access and manage their device's hardware information throughout its lifecycle. This integration will enhance the user experience, offering consistent hardware management for improved maintenance and lifecycle tracking of each PlanktoScope device.
+The EEPROM project has reached a functional prototype, with all desired actions for writing and reading hardware information now operational.
+The next phase will focus on integrating this functionality into the broader PlanktoScope software, allowing users to access and manage their device's hardware information throughout its lifecycle.
+This integration will enhance the user experience, offering consistent hardware management for improved maintenance and lifecycle tracking of each PlanktoScope device.
 
 ## Open issues (if applicable)
 One current limitation in this project is the requirement to manually solder a connection on the Write Protect (WP) pin of the EEPROM chip to enable writing operations. This step introduces some complexity and potential error for users or technicians during the assembly or modification process.
