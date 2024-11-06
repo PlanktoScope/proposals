@@ -20,7 +20,7 @@ A specific HAT was developped to satisfy the PlanktoScope needs.
 This PlanktoScope HAT connected to the raspberry pi and all of the external devices (led, motors, pump, camera) contains a 32 Kbit EEPROM chip which is a "type of non-volatile ROM that enables individual bytes of data to be erased and reprogrammed" (Wikipedia).
 It is therefore possible to store some data inside this chip and to read it back.
 
-For now (Sunray version 2024.0.0-beta.2) some of the hardware configuration of the PlanktoScope is entered by the user in the GUI.
+Currently (as of PlanktoScope OS v2023.9.0 and v2024.0.0), the hardware configuration of the PlanktoScope is entered by the user in the Node-RED dashboard and is stored in a `hardware.json` file which is lost when the PlanktoScope's SD card is re-flashed with a new SD card image.
 We would like to have an hardware configuration specific to each machine in case some specific modification is made.
 We would like to store this configuration in a safe place, independent from the software installed on the raspberry pi.
 
