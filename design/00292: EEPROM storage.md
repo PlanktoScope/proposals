@@ -69,3 +69,5 @@ This integration will enhance the user experience, offering consistent hardware 
 One current limitation in this project is the requirement to manually solder a connection on the Write Protect (WP) pin of the EEPROM chip to enable writing operations. This step introduces some complexity and potential error for users or technicians during the assembly or modification process.
 
 To address this, a planned improvement is to incorporate a bridge between the WP pin and GPIO pin 4 on the Raspberry Pi. By controlling the write protection via software, this enhancement would streamline write operations by allowing the program to enable or disable the WP functionality dynamically. This improvement would enhance flexibility and reduce the need for physical alterations.
+
+Currently, no design or plan has been proposed for enabling use of a JSON file on the PlanktoScope's SD card as a substitute for EEPROM (see the "Compatibility" section's discussion of backwards-compatibilitly with Adafruit HAT-based PlanktoScopes). That question will be left for future work, maybe as part of this proposal.
