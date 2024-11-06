@@ -76,10 +76,11 @@ Though currently sufficient, 32Kbits could become a constraint if future feature
 
 ## Compatibility
 
-Hardware Compatibility
+**Hardware Compatibility**
+
 The main backwards-compatibility issue concerns users of older Adafruit HAT-based versions of the PlanktoScope design. For those users, a simple solution would be to continue selecting their configuration in the GUI.
 
-Based on the official Raspberry Pi documentation (https://www.raspberrypi.com/documentation/computers/raspberry-pi.html), the Raspberry Pi’s EEPROM chip may already be reserved for boot-up processes, which limits its use for storing custom data. Therefore, we cannot reliably store hardware configuration data in the Raspberry Pi’s onboard EEPROM chip if the PlanktoScope HAT EEPROM is unavailable.
+Based on the official Raspberry Pi documentation(https://www.raspberrypi.com/documentation/computers/raspberry-pi.html), the Raspberry Pi’s EEPROM chip may already be reserved for boot-up processes, which limits its use for storing custom data. Therefore, we cannot reliably store hardware configuration data in the Raspberry Pi’s onboard EEPROM chip if the PlanktoScope HAT EEPROM is unavailable.
 
 To address this, we propose an alternative solution for configurations lacking a PlanktoScope HAT with EEPROM: storing the hardware configuration metadata in a JSON file on the SD card. This JSON file would serve as a substitute for EEPROM storage, ensuring access to essential hardware data without requiring dedicated EEPROM hardware.
 
@@ -93,7 +94,8 @@ This fallback solution ensures that PlanktoScope can manage and retrieve hardwar
 
 The PlanktoScope versions V2.5 and V2.6 do not natively support writing data to the EEPROM chip because the write-protect (WP) pin of the EEPROM is enabled. To disable write protection, a solder point must be applied to the WP pin.
 
-Data Schema Compatibility
+**Data Schema Compatibility**
+
 To ensure compatibility as the metadata schema evolves, we propose including a data schema version number as part of the metadata stored on the EEPROM. This approach will allow future iterations of the PlanktoScope OS to detect the schema version and adjust its handling of the data accordingly, ensuring backward and forward compatibility. When fields are added, removed, or modified (such as by adding new enum values), the schema version number will provide a reference point for determining if adjustments are needed.
 
 In addition to the schema versioning, the software should include handlers for common compatibility cases:
@@ -101,12 +103,14 @@ In addition to the schema versioning, the software should include handlers for c
 * Backward Compatibility: If an older schema version is detected, the software will ignore any fields that are no longer used in the current schema.
 * Forward Compatibility: If a newer schema version is detected, the software will try to process known fields and ignore any unrecognized fields to maintain operational consistency.
 
-MQTT API Compatibility
+**MQTT API Compatibility**
+
 This proposal does not modify any existing MQTT API routes. Instead, it introduces new MQTT API routes for EEPROM functionality, as described in the Proposal section. These new routes (eeprom/write_eeprom, eeprom/edit_eeprom, and eeprom/read_eeprom) will initially be considered experimental. No guarantees are made for future compatibility of these routes, as their implementation may evolve to meet additional requirements or to address unforeseen limitations.
 
 This experimental classification provides the flexibility needed to refine the API as usage grows and user feedback is collected, potentially stabilizing the routes in a future release.
 
 ## Implementation
+
 The EEPROM project has reached a functional prototype, with all desired actions for writing and reading hardware information now operational.
 The next phase will focus on integrating this functionality into the broader PlanktoScope software, allowing users to access and manage their device's hardware information throughout its lifecycle.
 This integration will enhance the user experience, offering consistent hardware management for improved maintenance and lifecycle tracking of each PlanktoScope device.
@@ -116,7 +120,5 @@ This integration will enhance the user experience, offering consistent hardware 
 One current limitation in this project is the requirement to manually solder a connection on the Write Protect (WP) pin of the EEPROM chip to enable writing operations. This step introduces some complexity and potential error for users or technicians during the assembly or modification process.
 
 To address this, a planned improvement is to incorporate a bridge between the WP pin and GPIO pin 4 on the Raspberry Pi. By controlling the write protection via software, this enhancement would streamline write operations by allowing the program to enable or disable the WP functionality dynamically. This improvement would enhance flexibility and reduce the need for physical alterations.
-
-Currently, no design or plan has been proposed for enabling use of a JSON file on the PlanktoScope's SD card as a substitute for EEPROM (see the "Compatibility" section's discussion of backwards-compatibilitly with Adafruit HAT-based PlanktoScopes). That question will be left for future work, maybe as part of this proposal.
 
 Currently, no design or plan has been proposed for enabling use of a JSON file on the PlanktoScope's SD card as a substitute for EEPROM (see the "Compatibility" section's discussion of backwards-compatibilitly with Adafruit HAT-based PlanktoScopes). That question will be left for future work, maybe as part of this proposal.
