@@ -1,6 +1,10 @@
 # Proposal: Use the PlanktoScope HAT EEPROM chip to store hardware configuration
 
-Author(s): Vallet, Laurent; Le Corre, Cléa Last updated: 30/10/2024 Discussion at https://github.com/PlanktoScope/PlanktoScope/issues/292
+Author(s): Vallet, Laurent; Le Corre, Cléa
+
+Last updated: 2024-10-30
+
+Discussion at https://github.com/PlanktoScope/PlanktoScope/issues/292
 
 ## Abstract
 
