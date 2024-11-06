@@ -26,7 +26,7 @@ We would like to store this configuration in a safe place, independent from the 
 
 ## Proposal
 
-We therefore propose to write a python script that allows the storage and the reading of the PlanktoScope hardware information on the EEPROM chip.
+We therefore propose to add functionality to PlanktoScope OS to store and load the PlanktoScope's hardware metadata onto/from the EEPROM chip.
 
 This information stored should contain : 
 * PlanktoScope reference
@@ -45,6 +45,26 @@ This information stored should contain :
 
 Those informations could be used to feed the metadata stored in the hardware.json file as described in the issue 290 (https://github.com/PlanktoScope/PlanktoScope/issues/290).
 
+Each metadata field will occupy a specific memory segment on the EEPROM, with a unique starting address assigned to each field. Fields will be allocated based on their expected data length, providing adequate space for each. Metadata values will be stored by converting each character to its ASCII byte representation, aligning with the EEPROM’s byte-based storage structure.
+
+The field-by-field storage method allows individual fields to be updated without affecting other data, providing flexibility in managing hardware metadata. It also keeps the memory layout extendable, allowing new fields to be added by allocating additional address blocks if needed.
+However, fixed addresses require careful memory management, as fields must be allocated a length that can accommodate any reasonable data expansion. The ASCII format, though simple, may lead to some inefficiencies in memory usage if fields grow beyond their allocated space.
+
+As an alternative, all metadata could be stored as a single JSON string, serialized into a byte sequence and written to the EEPROM in a single block. This approach would simplify storage by consolidating data into a unified structure.
+Using a single JSON string could simplify retrieval and storage, as all metadata would be read or written in one operation. JSON also allows for a flexible structure.
+This would however lack efficiency for selective updates. With JSON serialization, even minor changes to a single field would require rewriting the entire structure, impacting both memory efficiency and operational flexibility. Additionally, the size of the JSON string could become a constraint if future metadata expansion exceeds the EEPROM’s capacity.
+
+To support seamless interaction between the PlanktoScope OS and the EEPROM chip, we propose the addition of MQTT-based API routes. These routes will manage the reading, writing, and editing of EEPROM data, facilitating hardware configuration updates and retrieval.
+
+The MQTT routes are organized as follows:
+
+* `eeprom/#`: A wildcard route that listens to all EEPROM-related actions. This route handles messages for writing, editing, and reading actions based on the specified action in the payload.
+* `eeprom/write_eeprom`: Handles requests to write a complete hardware configuration to the EEPROM. This route requires a payload with the relevant metadata fields for storage.
+* `eeprom/edit_eeprom`: Allows for selective editing of EEPROM-stored data. Specific fields can be updated based on the provided payload, enabling targeted configuration changes.
+* `eeprom/read_eeprom`: Reads the current EEPROM contents and publishes them as a JSON payload containing the stored hardware metadata.
+
+These routes enable automated handling of hardware metadata, making it accessible for debugging, configuration updates, and consistent metadata integration across PlanktoScope datasets.
+
 ## Rationale
 
 The EEPROM chip currently used for the HAT has a capacity of 32Kbits. This provides adequate space for the necessary configuration without redundancy or excessive overhead.
@@ -56,9 +76,35 @@ Though currently sufficient, 32Kbits could become a constraint if future feature
 
 ## Compatibility
 
-The main compatibility issue concerns the adafruit HAT users.
-For those, a simple solution would be to continue selecting their configuration in the GUI, or adapt the script to store informations in the Raspberry pi EEPROM chip in case of not finding the PlanktoScope HAT EEPROM adress.
+Hardware Compatibility
+The main backwards-compatibility issue concerns users of older Adafruit HAT-based versions of the PlanktoScope design. For those users, a simple solution would be to continue selecting their configuration in the GUI.
+
+Based on the official Raspberry Pi documentation (https://www.raspberrypi.com/documentation/computers/raspberry-pi.html), the Raspberry Pi’s EEPROM chip may already be reserved for boot-up processes, which limits its use for storing custom data. Therefore, we cannot reliably store hardware configuration data in the Raspberry Pi’s onboard EEPROM chip if the PlanktoScope HAT EEPROM is unavailable.
+
+To address this, we propose an alternative solution for configurations lacking a PlanktoScope HAT with EEPROM: storing the hardware configuration metadata in a JSON file on the SD card. This JSON file would serve as a substitute for EEPROM storage, ensuring access to essential hardware data without requiring dedicated EEPROM hardware.
+
+This JSON file could be implemented using the following rules :
+* File Location: The JSON file can be stored in a designated directory on the SD card or within the application’s working directory.
+* Structure and Schema: The JSON file will mirror the EEPROM data schema, including all configuration fields and the schema version number to maintain compatibility with EEPROM-stored data.
+* Read/Write Operations: The PlanktoScope OS will include logic to check for the presence of an EEPROM. If no EEPROM is detected, the system will read from and write to the JSON file instead.
+* Data Persistence: While the JSON file provides a flexible and easily accessible storage alternative, it is tied to the SD card. As such, it is vulnerable to being overwritten if the SD card is re-flashed. To address this, users should be informed to back up configuration data separately if they anticipate re-flashing the SD card.
+
+This fallback solution ensures that PlanktoScope can manage and retrieve hardware configuration data consistently, regardless of the presence of an EEPROM. It also allows compatibility across various hardware configurations, maintaining seamless functionality for users of older Adafruit HAT-based PlanktoScopes or systems without EEPROM.
+
 The PlanktoScope versions V2.5 and V2.6 do not natively support writing data to the EEPROM chip because the write-protect (WP) pin of the EEPROM is enabled. To disable write protection, a solder point must be applied to the WP pin.
+
+Data Schema Compatibility
+To ensure compatibility as the metadata schema evolves, we propose including a data schema version number as part of the metadata stored on the EEPROM. This approach will allow future iterations of the PlanktoScope OS to detect the schema version and adjust its handling of the data accordingly, ensuring backward and forward compatibility. When fields are added, removed, or modified (such as by adding new enum values), the schema version number will provide a reference point for determining if adjustments are needed.
+
+In addition to the schema versioning, the software should include handlers for common compatibility cases:
+
+* Backward Compatibility: If an older schema version is detected, the software will ignore any fields that are no longer used in the current schema.
+* Forward Compatibility: If a newer schema version is detected, the software will try to process known fields and ignore any unrecognized fields to maintain operational consistency.
+
+MQTT API Compatibility
+This proposal does not modify any existing MQTT API routes. Instead, it introduces new MQTT API routes for EEPROM functionality, as described in the Proposal section. These new routes (eeprom/write_eeprom, eeprom/edit_eeprom, and eeprom/read_eeprom) will initially be considered experimental. No guarantees are made for future compatibility of these routes, as their implementation may evolve to meet additional requirements or to address unforeseen limitations.
+
+This experimental classification provides the flexibility needed to refine the API as usage grows and user feedback is collected, potentially stabilizing the routes in a future release.
 
 ## Implementation
 The EEPROM project has reached a functional prototype, with all desired actions for writing and reading hardware information now operational.
@@ -66,8 +112,11 @@ The next phase will focus on integrating this functionality into the broader Pla
 This integration will enhance the user experience, offering consistent hardware management for improved maintenance and lifecycle tracking of each PlanktoScope device.
 
 ## Open issues (if applicable)
+
 One current limitation in this project is the requirement to manually solder a connection on the Write Protect (WP) pin of the EEPROM chip to enable writing operations. This step introduces some complexity and potential error for users or technicians during the assembly or modification process.
 
 To address this, a planned improvement is to incorporate a bridge between the WP pin and GPIO pin 4 on the Raspberry Pi. By controlling the write protection via software, this enhancement would streamline write operations by allowing the program to enable or disable the WP functionality dynamically. This improvement would enhance flexibility and reduce the need for physical alterations.
+
+Currently, no design or plan has been proposed for enabling use of a JSON file on the PlanktoScope's SD card as a substitute for EEPROM (see the "Compatibility" section's discussion of backwards-compatibilitly with Adafruit HAT-based PlanktoScopes). That question will be left for future work, maybe as part of this proposal.
 
 Currently, no design or plan has been proposed for enabling use of a JSON file on the PlanktoScope's SD card as a substitute for EEPROM (see the "Compatibility" section's discussion of backwards-compatibilitly with Adafruit HAT-based PlanktoScopes). That question will be left for future work, maybe as part of this proposal.
