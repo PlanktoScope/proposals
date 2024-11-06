@@ -8,7 +8,7 @@ Discussion at https://github.com/PlanktoScope/PlanktoScope/issues/292
 
 ## Abstract
 
-The following document proposes to store the PlanktoScope (PS) hardware configuration in the 32 Kbits EEPROM chip of the PlanktoScope HAT in order to : 
+The following document proposes to store PlanktoScope hardware configuration metadata in the 32 Kbit EEPROM chip of the PlanktoScope HAT, in order to: 
 * automatically save the hardware state of the machine
 * easily retrieve the hardware configuration for debugging
 * feed the metadata with precise hardware information
